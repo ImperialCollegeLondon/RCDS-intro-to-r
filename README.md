@@ -1,4 +1,4 @@
-# Introduction
+# Introduction to Programming in R
 
 This course provides an introduction to R as a programming language, including: 
 
@@ -122,13 +122,11 @@ vs.
 You have 3 pound coins, 3x 50p, 3x 20p and 4x 5p. Flapjacks cost 89p. How many can you buy?
 ```{r}
 # write the expression below and use Ctrl-Shift-Enter to evaluate it
-(3*100 + 3*50 + 3*20 + 4*5) %/% 89
 
 ```
 
 How much money will you have left?
 ```{r}
-(3*100 + 3*50 + 3*20 + 4*5) %% 89
 
 ```
 
@@ -366,9 +364,6 @@ Find the `sum`, `mean` and `median` of the data provided.
 ```{r}
 my.data <- c(6.1, 2.7, 1.2, 3.4, 2.0, 8.0, 3.3, 1.2, 6.1)
 
-mean(my.data)
-median(my.data)
-sum(my.data)
 
 ```
 
@@ -389,7 +384,8 @@ The simplest method is numerical indexing using square brackets `[]`.
 ```{r}
 x <- 20:10
 x[1]
-index <- c(1, 3, 5) # a vector if the indices we want
+
+index <- c(1, 3, 5) # a vector of the indices we want
 x[index]
 ```
 
@@ -413,13 +409,16 @@ x > 15
 
 index <- x > 15
 x[index]
-which(index)
 ```
 
 The vector `index` is logical, containing element-wise Boolean values (`TRUE` or `FALSE`) for the comparison. 
 The `[]` operator handles a logical vector by selecting only those values that are true.
 
 We use `which(x)` to find the index positions of the `TRUE` elements of a logical vector `x`.
+
+```{r}
+which(index)
+```
 
 
 #### Exercise {-}
@@ -464,10 +463,8 @@ The `&` operator has coerced these numeric values to logical ones (reading `0` a
 
 Which indices of `x` have values between 11 and 18 and are divisible by 3? Use a logical expression.
 ```{r}
-x
-x>11 & x<18
-x %% 3 == 0
-which(x>11 & x<18 & (x%%3 == 0))
+x <- 20:10
+
 
 ```
 
@@ -503,12 +500,6 @@ days <- c("Monday", "Tuesday", "Wednesday","Thursday", "Friday")
 income <- c(140, 101, 25, 42, 120)
 expenses <- c(220, 23, 0, 51, 34)
 
-profit <- income - expenses
-names(profit) <- days
-profit
-which(profit>0)
-sum(profit)
-profit - 50
 
 ```
 
@@ -520,25 +511,6 @@ Calculate your daily donations (a vector).
 ```
 
 
-
-Define a vector named `poker` as follows:
-
-On Monday you won $75, On Tuesday you lost $50, On Wednesday you won $100, On Thursday you lost $35, and On Friday you won $10.
-
-Now create the following variables:
-
-
-Solution:
-```{r}
-poker <- c(75, -50, 100, -35, 10)
-days <- c("Monday", "Tuesday", "Wednesday","Thursday", "Friday")
-names(poker) <- days
-(poker.profit <- sum(poker))
-(poker.winning.days <- names(which(poker>0)))
-poker.accounts <- poker
-poker.accounts[poker>50] <- 50
-poker.accounts
-```
 
 
 ## Matrices
@@ -594,9 +566,7 @@ The dimensions must conform.
 
 Use `cbind()` and `rbind()` to combine `A` and `B`. What are the dimensions of the resulting matrices?
 ```{r}
-dim(cbind(A,B))
 
-dim(rbind(A,B))
 
 ```
 
@@ -702,19 +672,10 @@ Given the coefficients $a$, $b$ and $c$ of a quadratic equation $ax^2 + bx + c =
 
 ```{r}
 a <- 1
-b <- 0
-c <- 0
+b <- 5
+c <- 3
 
-disc <- b^2 - 4*a*c
-if(disc>0){
-  roots <- c((-b + sqrt(disc)/2*a),(-b - sqrt(disc)/2*a))
-} else if(disc == 0){
-  roots <- c(-b/2*a)
-} else {
-  roots <- c()
-}
 
-show(roots)
 
 ```
 
@@ -869,20 +830,8 @@ by default.
 4. Wrap an `if` construct around the `print()` function: this
 function should only be executed if `print_info` is `TRUE`.
 
-**Solution**
-```
-# Create a function pow_two()
-pow two <- function (x, print_info = TRUE) {
-  y <- x^2
-  if (print_info == TRUE){
-    print(paste(x, "to the power two equals", y))
-  }
-  return(y)
-}
+```{r}
 
-# Use the function
-pow_two(12)
-pow_two(12, print info = FALSE)
 ```
 
 ---
@@ -915,7 +864,6 @@ row (`MARGIN = 1`). Note also another style of function call.
 
 `apply()`, can handle extra arguments to the “applied function“.
 Care is needed to handle the structure that is returned.
-
 
 
 There are three variants: `lapply()`, `sapply()` and `vapply()`.
@@ -990,17 +938,11 @@ the elements in `split_math`. Assign the result, which is a list,
 to a new variable `split_low`.
 4. Inspect the contents of `split_low` with `str()`.
 
-**Solution**
+
+```{r}
+
 ```
-> pioneers <- c("GAUSS:1777", "BAYES:1702",
-"PASCAL:1623", "PEARSON:1857")
-> # Split names from birth year
-> split math <- strsplit(pioneers, split = ":")
-> # Convert to lowercase strings: split low)
-> split low <- lapply(split math, tolower)
-> # Take a look at the structure of split low
-> str(split low)
-```
+
 
 ### sapply 
 
@@ -1266,24 +1208,8 @@ Load the weather data in your workspace. Try the following to get a feel for the
 4. View the structure of weather.
 5. View a `summary()` of weather.
 
-
-
-**Solution**
 ```
-> # Verify that weather is a data.frame
-> class(weather)
-> # Check the dimensions)
-> dim(weather)
-> # View the column names
-> names(weather)
-> # View the structure of the data
-> str(weather)
-> # Load dplyr package)
-> library(dplyr))
-> # Look at the structure using dplyr’s glimpse()
-> glimpse(weather)
-> # View a summary of the data
-> summary(weather)
+
 ```
 
 ## Factors
@@ -1465,6 +1391,7 @@ lines(lowess(wt,mpg), col="blue") # lowess line
 
 # Further Reading
 
+Roger D. Peng, [R Programming for Data Science](https://bookdown.org/rdpeng/rprogdatascience/) (2019)
 
 
 # Acknowledgements {-}
