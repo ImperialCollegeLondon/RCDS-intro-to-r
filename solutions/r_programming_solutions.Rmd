@@ -1,0 +1,1562 @@
+---
+title: "R Programming"
+author: "John Pinney"
+date: "October 2019"
+output:
+  html_notebook:
+    css: rmd.css
+    number_sections: yes
+    toc: yes
+    toc_depth: 2
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '2'
+---
+
+# Introduction
+
+This course provides an introduction to R as a programming language, including: 
+
+- basic calculations
+- data structures (vectors, matrices and data frames)
+- control structures (if, while and for)
+- functions
+- importing and working with data
+- plotting charts
+
+We will not look at statistical testing or advanced data manipulation, as these are beyond the scope of this introductory course.
+
+
+## What is R?
+
+R is 
+
+- a powerful language and environment for statistical computing and graphics.
+- based on the S language developed at Bell Labs.
+- Free Software under the GNU General Public License.
+
+R is supported on MS Windows, Mac OS-X and LINUX.
+
+Main website: [cran.r-project.org](http://cran.r-project.org).
+
+R is often used in combination with the [RStudio](https://rstudio.com/) interface for educational and research purposes.
+
+
+## Getting started in RStudio
+
+![](rconsole.png)
+
+- Bottom left: console window (type commands here and see the output directly)
+- Top left: editor window (for editing R notebooks and scripts)
+- Top right: workspace / history window (examine the current workspace, import datasets, see commands entered previously)
+- Bottom right: files / plots / packages / help window (change working directory, install packages, see graphics output, browse help)
+
+## R notebooks
+
+This document is an example of an *R notebook*, which combines text and code and makes it easy to embed R analysis within a report (ouput as HTML, PDF, Word document or presentation slides). This can help to make research more reproducible by allowing you to share an entire analysis workflow together with a narrative.
+
+When you open the notebook's source code (*.Rmd* file) in RStudio, you can view and edit it in the editor window.
+
+Text is formatted using the [R markdown](https://rmarkdown.rstudio.com/) notation, which is derived from [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet). This is a simple way to apply styling to text and indicate the structure of your document.
+
+R code is included as *chunks*, which look like this:
+
+```{r}
+## R code lives here
+print("Hello RStudio!")
+```
+
+Note that anything following the `#` symbol is a comment and is ignored by R.
+
+When the cursor is inside a chunk, you can execute the code using *Ctrl-Shift-Enter*. The commands and output appear in the console window as if the chunk had been copy-pasted there. The output also appears in the notebook just after the chunk.
+
+The `[1]` preceding the output just shows that this is the first item in a vector of output.
+
+A notebook is a living document. You are encouraged to make use of this notebook to try out the example code, alter it, complete the exercises and add your own notes and code chunks. You can insert a new code chunk using the shortcut _Ctrl+Alt+I_.
+
+
+## Working directory
+
+Before you start work, please check your working directory:
+
+```{r}
+getwd()
+```
+
+If necessary, use `setwd()` to change this to the directory containing the data for this workshop:
+
+```{r}
+setwd("path/to/my/working/directory")
+```
+
+You can also change the working directory using the files window in RStudio (bottom right). 
+Navigate to the directory you want and click the cog icon for the "Set as Working Directory" option.
+
+
+
+## Help
+
+R has various interactive help facilities. The most useful, to access
+the manual pages for a specific command, is simply to use
+`?function`. For example
+
+```{r}
+?mean
+```
+
+The R manual pages include a "See Also" and "Examples" section, which can be very useful. 
+
+The function `help.start` will fire up the HTML help system, which allows keyword searching.
+
+
+---
+
+# R as a Calculating Environment
+
+The simplest R commands are just mathematical expressions, which are evaluated and the answer is printed out to the console.
+
+```{r}
+2 + 2
+```
+
+You can write numbers as decimals or using scientific notation, e.g. `0.001` is equivalent to `1e-3`.
+
+
+## Arithmetic operators
+
+- Addition: `+`
+- Subtraction: `-`
+- Multiplication: `*`
+- Division: `/`
+- Exponentiation: `ˆ` (i.e. 'to the power of')
+- Integer Division: `%/%` (i.e. division without allowing fractions)
+- Modulo: `%%` (i.e. the remainder after integer division)
+
+Note that multiplication/division take place before addition/subtraction. You can change the order of operations using parentheses `()`. e.g.
+
+```{r}
+5 + 6 / 2
+```
+
+vs.
+
+```{r}
+(5 + 6) / 2
+```
+
+
+#### Exercise {-} 
+
+You have 3 pound coins, 3x 50p, 3x 20p and 4x 5p. Flapjacks cost 89p. How many can you buy?
+```{r}
+# write the expression below and use Ctrl-Shift-Enter to evaluate it
+(3*100 + 3*50 + 3*20 + 4*5) %/% 89
+```
+
+How much money will you have left?
+```{r}
+(3*100 + 3*50 + 3*20 + 4*5) %% 89
+```
+
+
+## Mathematical functions and constants
+
+There are a number of basic mathematical functions available, e.g.
+
+- `sqrt()`: square root
+- `sin()`, `sinh()` and the other trigonometric / hyperbolic functions
+- `asin()`, `asinh()` and the other inverse functions 
+- `exp()`: natural exponential function
+- `log()`, `log10()`: logarithmic functions
+- `abs()`: absolute value
+- `round()`: round to the closest integer
+- `floor()`: round down
+- `ceiling()`: round up
+
+Also `pi` for mathematical $\pi$
+
+e.g.
+```{r}
+cos(pi/3)
+```
+
+
+
+
+#### Exercise {-} 
+
+What happens when the input provided is outside the domain of a function (e.g. log(-4))?
+
+```{r}
+# R produces an error and returns the result NaN, indicating an undefined value
+log(-4)
+```
+
+
+
+
+## Basic data types in R
+
+R works with numerous data types. Here are some of the most basic ones:
+
+- Decimal values like `4.5` are called `numeric`.
+- Natural numbers written like `4L` are called `integer`. Integers are also `numeric`.
+- Boolean values (`TRUE` or `FALSE`) are called `logical`.
+- Text (or string) values (`"a"`,`"apple"`,`"54"` etc.) are called `character`.
+- Complex numbers (e.g. `5+3i`) are called `complex`.
+
+To check the data type of an object, the function `class()` is used. You can also test data types using `is.*()`, e.g.
+```{r}
+class(154)
+class(154L)
+is.integer(154)
+is.logical(FALSE)
+```
+
+
+
+
+## Variables
+
+A **variable** is a basic concept in all programming. You can think of a
+variable as a labelled container that allows you to store a value (e.g. 55) or an object (e.g. a data structure).
+
+The assignment operator `<-` is preferred for variable assignment in R, but `=` will also work.
+
+```{r}
+a <- 5
+b = 9
+```
+
+You can then use this variable’s name to easily access the value or the object that is stored within this variable. 
+Use `print()` or `show()` to display values in the console window. Putting parentheses around an expression is another alternative.
+
+```{r}
+print(a)
+show(b)
+(a+b)
+```
+
+You can easily change the value assigned to a variable.
+```{r}
+a <- 101
+print(a)
+
+a <- a + 10
+print(a)
+```
+
+The variable is retained in memory (see the environment window at top right) until deletion with `rm()`.
+
+```{r}
+rm(a)
+print(a)
+```
+
+Note that rm is *not* reversible.
+
+Variables should have names that are *meaningful*, and should follow the R syntax
+rules, that the name should consist of only
+
+- letters (a-z / A-Z) 
+- numbers
+- period `.`
+- underscore `_`
+
+A name must start with a letter or period. Names starting with a period are hidden by default.
+
+A common problem is trying to use names that are already in use by R:
+e.g. reserved words like `if` or `break` or system objects like `mean`, `TRUE`,
+and `pi`.
+
+Another common irritation for new users is that R is *case sensitive*,
+so `T` (a system representation of logical true) is different to `t` (function for matrix transpose).
+
+
+
+## Logical expressions
+
+The comparison operators known to R are:
+
+- `<` for less than
+- `>` for greater than
+- `<=` for less than or equal to
+- `>=` for greater than or equal to
+- `==` for equal to each other
+- `!=` not equal to each other
+
+e.g.
+```{r}
+a <- 21
+a > 12
+```
+
+The output of a logical expression is one of the *boolean* values `TRUE` or `FALSE`.
+
+We will also need to handle more complex comparisons, like ”greater than 12, and even.” Such comparisons require the *logical operators*:
+
+- `!` logical NOT
+- `&` logical AND
+- `∣` logical OR
+
+```{r}
+a > 12 & a %% 2 == 0
+```
+
+
+## Precision and rounding error
+
+R calculates all values to a high precision, but will only display the first 7 significant figures by default.
+You can change this using a command like `options(digits = 10)` (which shows the first 10 digits).
+
+However, only fractions whose denominator is a power of 2 can be represented exactly by R. 
+All other real values are subject to rounding error, which can cause a lot of confusion when testing for equality, e.g.
+
+```{r}
+sqrt(2) * sqrt(2) == 2
+```
+
+To get around this issue, we use the function `all.equal()`, which returns `TRUE` if the difference between its two arguments is less than R's level of accuracy:
+
+```{r}
+all.equal(sqrt(2)*sqrt(2),2)
+```
+
+
+## Vectors
+
+Vectors are the fundamental data structure in R. A vector is an
+*integer-indexed* one-dimensional array that can hold of data of the
+*same* type.
+
+```{r}
+my.integers <- 1:10 # sequence of integers from 1 to 10
+my.integers
+length(my.integers) # length of a vector
+```
+
+
+To create a vector in R, the combine function `c()` is used. For
+example:
+```{r}
+numeric.vector <- c(1, 10, 49)
+character.vector <- c( "a", "b", "c")
+logical.vector <- c(TRUE, FALSE, TRUE)
+```
+
+
+
+Other useful functions for creating numeric vectors include `seq()` and `rep()`.
+```{r}
+seq(from=1, to=7, by=3)
+rep(1:4, times=2)
+```
+
+
+You can give a name to the elements of a vector with the names() function.
+```{r}
+names(numeric.vector) <- character.vector
+show(numeric.vector)
+```
+
+
+### Operations on vectors {-}
+
+Different types of operations are appropriate for vectors of different type. 
+Perhaps the most familiar is arithmetic for numeric vectors.
+It is important to understand that if you perform arithmetic operations
+on two vectors in R, it performs *element-wise* operation:
+
+```{r}
+x <- c(6.5, 4.7, 1.2, -3.3)
+y <- c(1, 2, 3, 4)
+
+x+y
+x/y
+```
+
+
+#### Exercise {-} 
+
+What happens when we try to do arithmetic with vectors that are of different lengths? Or when we mix a scalar with a vector?
+```{r}
+x <- c(6.5,  1.2, 4.7, -3.3)
+y <- c(1, 2)
+
+# R repeats the elements of the shorter vector as needed.
+# e.g. x + y is the same as x + c(1, 2, 1, 2)
+x + y
+
+# A scalar is applied in the same way
+# e.g. x + 1 is the same as x + c(1, 1, 1, 1)
+x + 1
+```
+
+Try applying some mathematical functions to a numeric vector. Use `plot(x,y)` to see the results
+```{r}
+x <- -10:10
+y <- abs(x)
+plot(x,y)
+```
+
+
+Find the `sum`, `mean` and `median` of the data provided.
+```{r}
+my.data <- c(6.1, 2.7, 1.2, 3.4, 2.0, 8.0, 3.3, 6.1, 1.2)
+
+mean(my.data)
+median(my.data)
+sum(my.data)
+```
+
+Some other useful functions for vectors: `unique()`,`prod()`,`max()`,`min()`,`range()`,`var()`,`sd()`,`sample()`,`sort()`,`rev()`,`append()`. 
+
+Try these out below to see how they work.
+```{r}
+my.data # the original vector
+unique(my.data) # the unique values
+prod(my.data) # the product
+max(my.data) # the maximum value
+min(my.data) # the minimum value
+range(my.data) # the range (min and max)
+var(my.data) # the variance
+sd(my.data) # the standard deviation
+sample(my.data, 3) # sample without replacement
+sort(my.data) # sort in ascending order
+rev(my.data) # reverse the vector
+append(my.data, c(5.5, 3.2)) # append some values
+```
+
+
+
+### Selection by index {-}
+
+We often need to select elements of numeric vectors (or other data
+structures). Such selection can be implemented a number of ways.
+The simplest method is numerical indexing using square brackets `[]`.
+
+```{r}
+x <- 20:10
+x[1]
+index <- c(1, 3, 5) # a vector of the indices we want
+x[index]
+```
+
+Note that indices in R start from `1`, not `0` as in many other languages.
+
+If names have been assigned to the vector elements, we can select by name instead of by numeric position:
+
+```{r}
+numeric.vector["c"]
+```
+
+
+### Selection by comparison {-}
+
+It is often useful to do conditional selection. For example, to select only the
+positive values from a vector:
+
+```{r}
+x <- -5:5
+x
+x >= 0 
+
+index <- x >=0
+x[index]
+which(index)
+```
+
+The vector `index` is logical, containing element-wise Boolean values (`TRUE` or `FALSE`) for the comparison. 
+The `[]` operator handles a logical vector by selecting only those values that are true.
+
+We use `which(x)` to find the index positions of the `TRUE` elements of a logical vector `x`.
+
+
+
+The functions `any()` and `all()` can also be used to test the elements of a vector. These return a single Boolean, e.g.
+
+```{r}
+x <- 20:12
+x
+
+any(x == 16)
+all(x > 12)
+```
+
+Another useful operator is `%in%`, which tells you whethe a vector contains a particular object, e.g.
+
+```{r}
+x <- 3:9
+
+5 %in% x
+0 %in% x
+```
+
+
+
+#### Exercise {-} 
+
+Look at the following expressions. Can you describe what they do?
+```{r}
+x <- -5:5 # original data
+index <- x>0 # vector of positions in x that are greater than 0 (logical)
+sum(index) # number of positions in index that are TRUE
+sum(x[index]) # sum of all data greater than 0
+```
+
+Note that here the vector `index` is logical, containing the values `FALSE` and `TRUE`. 
+The `sum()` function has *coerced* these logical values to  numeric ones (reading `FALSE` as `0` and `TRUE` as `1`).
+This automatic coercion makes R very flexible, but can also be a source of confusion.
+
+To explicitly coerce objects from one class to another, we can use the `as.*` functions, e.g.
+```{r}
+index
+as.numeric(index)
+```
+
+
+### Combining logical vectors {-}
+
+Logical vectors can be combined element-wise with `!` (logical NOT), `&` (logical AND ) and `∣` (logical OR).
+
+```{r}
+x <- 20:10
+index.odd <- (x %% 2)
+index.odd
+
+index.gt15 <- x > 15
+x[index.odd & index.gt15]
+```
+
+The vector `index.odd` is actually numeric, containing values `0` and `1`. 
+The `&` operator has coerced these numeric values to logical ones (reading `0` as `FALSE` and any other number as `TRUE`).
+
+
+#### Exercise {-} 
+
+Which indices of `x` have values between 11 and 18 and are divisible by 3? Use a logical expression.
+```{r}
+x
+x>11 & x<18
+x %% 3 == 0
+which(x>11 & x<18 & (x%%3 == 0))
+```
+
+
+
+### Vector transformations {-}
+
+Having selected a subset of indices, we can make conditional assignments, e.g.
+
+```{r}
+x <- 20:10
+x[x < 15] <- -1 # assign elements less than 15 to be -1
+
+x
+```
+
+
+
+#### Exercise {-} 
+
+You have started a business selling flapjacks outside the underground station.
+The vectors below show your income and expenses for the first five days of trading.
+
+Create the following variables:
+
+1. `profit`, your daily profit (a vector).
+2. `profit.total`, your overall profit at the end of the week (a scalar).
+3. `profitable.days`, the names of the days on which you made a positive profit (a vector).
+
+```{r}
+days <- c("Monday", "Tuesday", "Wednesday","Thursday", "Friday")
+income <- c(140, 101, 25, 42, 120)
+expenses <- c(220, 23, 0, 51, 34)
+
+profit <- income - expenses
+names(profit) <- days
+profit
+
+profit.total <- sum(profit)
+profit.total
+
+profitable.days <- names(which(profit>0))
+profitable.days
+```
+
+For tax reasons, you decide to donate any daily profit over £50 to charity.
+Calculate your daily donations (a vector).
+
+```{r}
+donations <- profit-50
+donations[donations < 0] <- 0
+donations
+```
+
+
+
+
+## Matrices
+
+In R, a matrix is a two-dimensional collection of elements of the
+same data type (numeric, character, or logical) arranged into a
+fixed number of rows and columns.
+
+A matrix is constructed from a vector by filling positions by column or by row:
+```{r}
+A <- matrix(1:6, nrow=3) # default filling is by column
+A
+dim(A) # matrix dimensions (rows first)
+```
+
+```{r}
+B <- matrix(1:6, byrow=TRUE, nrow=3) # switch to filling by row
+B
+dim(B) # matrix dimensions (rows first)
+```
+
+
+The functions `colnames()` and `rownames()` are used to add names for the the columns and the rows of a matrix.
+```{r}
+colnames(A) <- c("red", "green")
+rownames(A) <- c("apple", "pepper", "tomato")
+A
+```
+
+The functions `rowSums()` and `colSums()` conveniently calculate the totals for each row and column of a matrix.
+```{r}
+colSums(A)
+rowSums(A)
+```
+
+
+A diagonal matrix can be constructed using the function `diag()`, e.g.
+```{r}
+diag(4)
+diag(4, x=1:4)
+```
+
+
+Selection (and modification) of elements of a matrix uses the `[]` operator, but with two indices:
+```{r}
+A[2,2] # single element
+A[,2] # single column
+A[2,] # single row
+```
+
+If only one index is provided, an element is returned by treating the matrix as a vector, read column-wise.
+```{r}
+A[3]
+B[3]
+```
+
+
+The functions `cbind()` and `rbind()` are available for concatenating matrices (or vectors) by row (row bind) or column (column bind).
+The dimensions must conform.
+
+
+#### Exercise {-} 
+
+Use `cbind()` and `rbind()` to combine `A` and `B`. What are the dimensions of the resulting matrices?
+```{r}
+cbind(A,B)
+dim(cbind(A,B))
+
+rbind(A,B)
+dim(rbind(A,B))
+```
+
+
+
+### Matrix Transformations {-}
+
+As with vectors, element-wise arithmetic can be applied to matrices.
+```{r}
+1 + A / 2
+```
+
+Note that `*` operates element-wise. For matrix multiplication, use `%*%`
+```{r}
+C <- matrix(1:4,nrow=2)
+
+C
+C * C
+C %*% C
+```
+
+
+Many functions can also be applied element-wise to matrices, e.g.
+```{r}
+log(A)
+```
+
+Some other functions taking matrix arguments:
+
+- `nrow(A)`
+- `ncol(A)`
+- `det(A)` (the determinant of `A`)
+- `t(A)` (the transpose of `A`)
+- `solve(A,B)` returns `x` such that `A %*% x == B`
+
+If `A` is invertible, `solve(A)` returns the matrix inverse of `A`:
+```{r}
+invC <- solve(C)
+invC
+C %*% invC
+```
+
+
+#### Exercise {-}
+
+In linear algebra, a _rotation matrix_ is used to perform rotations in Euclidean space.
+For example, the matrix
+$$
+M =
+\begin{bmatrix}
+\cos \theta & -\sin \theta \\
+\sin \theta & cos \theta
+\end{bmatrix}
+$$
+rotates a 2D vector $x$ anticlockwise by the angle $\theta$: 
+$$
+x' = Mx
+$$
+
+Find the result of rotating the vector (5,3) anticlockwise by 60$^{\circ}$.
+```{r}
+x <- c(5,3)
+theta <- (60/360)*2*pi
+
+M <- matrix(c(cos(theta), sin(theta), -sin(theta), cos(theta)), nrow=2)
+M %*% x
+```
+
+
+
+# R Programming Basics
+
+Writing individual commands can take us a long way with R, but sometimes we need to do more than just execute a list of commands in sequence.
+To release the power of the programming language, we need the language constructs which provide *control structures*, giving the
+capacity for *conditional execution* and *iteration*. We will also see how to write reusable pieces of code as *functions*.
+
+This is where we start to do real computer programming!
+
+## `if` statement
+
+It is often the case that we want a program to take different
+actions according to the value of a variable. The R language
+statement `if` provides this functionality. The general syntax is
+
+```
+if (condition) {
+  #true branch
+} else {
+  #false branch
+}
+```
+
+We have already seen a variety of logical comparisons that can
+serve as `condition`. If `condition` evaluates to `TRUE`, then
+the *true branch* is evaluated, otherwise the *false branch* is evaluated.
+
+The `else` part of an if statement is optional. Note that in R it must appear on the same line as the preceding `}`.
+
+If `condition` evaluates to `NA` (i.e. missing data), an error occurs.
+
+`if` can also occur within a branch of another `if`
+statements. That is, `if` can be nested. For example
+```{r}
+day <- "Tuesday"
+weekdays <- c("Monday", "Tuesday", "Wednesday","Thursday", "Friday")
+weekend <- c("Saturday", "Sunday")
+
+if (day %in% weekdays) {
+
+    print("Back to work!")
+
+  # branches that are single statements can omit { }
+  if (day == "Friday")  print("Doughnuts today!")
+  else print("No doughnuts today.")
+  
+} else if (day %in% weekend) {
+
+      print("Enjoy your weekend!")
+
+} else {
+
+      print("I didn't recognise that day.")
+  
+}
+```
+
+
+#### Exercise {-} 
+
+Given the coefficients $a$, $b$ and $c$ of a quadratic equation $ax^2 + bx + c = 0$, store the real roots in the vector `roots` and display them.
+
+```{r}
+a <- 5
+b <- 6
+c <- 1
+
+disc <- b^2 - 4*a*c
+if(disc>0){
+  roots <- c((-b + sqrt(disc)/2*a),(-b - sqrt(disc)/2*a))
+} else if(disc == 0){
+  roots <- c(-b/2*a)
+} else {
+  roots <- c()
+}
+
+show(roots)
+```
+
+
+
+## `while` loop
+
+Loops can come in handy on numerous occasions. `while` loops are
+like repeated `if` statements.
+
+```
+while (condition) {
+  # expression
+}
+```
+
+Remember that the `condition` part of this recipe should become
+`FALSE` at some point during the execution. Otherwise, the while
+loop will go on indefinitely. 
+```{r}
+a <- 1
+
+while (a <= 10) {
+  print(a)
+  a = a + 1
+}
+```
+
+
+
+
+#### Exercise {-} 
+
+
+Complete the code to find the first Fibonacci number greater than 100.
+```{r}
+F <- c(1,1)
+n <- length(F)
+
+while(F[n] <= 100){
+  n <- n+1
+  F[n] <- F[n-2] + F[n-1]
+}
+
+show(F[n])
+```
+
+
+## `for` loop
+
+The `for` loop is designed to iterate over all elements in a vector.
+Consider the following loops, which do the same thing:
+```{r}
+primes <- c(2, 3, 5, 7, 11, 13)
+
+# loop version 1
+for (p in primes) {
+  print(p)
+}
+
+# loop version 2
+for (i in 1:length(primes)) {
+  print(primes[i])
+}
+```
+
+The first version is concise and easy to read, but has no access to
+the looping index, whereas the second version is very versatile but
+a bit more complex to read and write.
+
+#### Exercise {-} 
+
+Complete the `for` loop to calculate the factorial of a given number, `n`
+```{r}
+n <- 6
+n_factorial <- 1
+
+for(i in 1:n){
+  n_factorial <- n_factorial * i
+}
+
+show(n_factorial)
+```
+
+
+
+
+## Functions
+
+Functions in R mostly follow the "black box" principle, that is, they take a set of _input arguments_ and return an _output value_. 
+You can use the function without knowing what happens inside it.
+
+![](blackbox.png)
+
+To examine the essential arguments for a function use `args()`. For instance:
+```{r}
+args(sd)
+```
+
+
+Argument lists include named values with specified defaults, in the
+format `name=value`. R can match arguments both by position and
+by name.
+
+- By position: provide arguments in the order given by the function
+prototype.
+- By name: provide arguments explicitly by name, as name=value. Only
+sufficient letters of the name to uniquely identify it are
+required, but note case-sensitivity.
+
+These two approaches can be mixed. For example;
+```{r}
+my.data <- c(16, 9, 13, 5, NA, 17, 14)
+sd(my.data, na.rm = TRUE)
+```
+
+For the function `sd`, `x` is required; if you do not specify it, R will
+throw an error. `na.rm` is an optional argument; it has a default value which is used if the argument is not explicitly specified.
+
+
+### Writing your own Functions {-}
+
+R allows the user to define their own functions. The main function definition syntax is:
+
+```
+functionname <- function (args) {
+
+  # body of the function goes here
+  value <- something
+
+  return(value)
+}
+```
+
+where `args` is a set of arguments. The function is called `functionname`.
+
+If the `return` value is not given explicitly, the last expression evaluated is returned.
+
+
+You can define default argument values in your own R functions:
+```{r}
+my_fun <- function(arg1, arg2 = 0) {
+  return(arg1 + arg2)
+}
+
+my_fun(5,6)
+my_fun(3)
+```
+
+#### Exercise {-} 
+
+Create a new function, `my.factorial`, which returns the factorial of its (integer) argument.
+```{r}
+my.factorial <- function(n) {
+  n_factorial <- 1
+
+  for(i in 1:n){
+    n_factorial <- n_factorial * i
+  }
+
+  return(n_factorial)
+}
+
+my.factorial(6)
+```
+
+Can you rewrite your function so that it calls itself instead of using a loop?
+```{r}
+my.factorial <- function(n) {
+  if(n == 1) return(1)
+  else return(n * my.factorial(n-1))
+}
+
+my.factorial(6)
+```
+
+
+
+
+# Data Handling in R
+
+R has been designed as a language for data analysis. It provides a number of built-in data structures and functions to make common data handling tasks easier. Here we will look at *factors*, *lists*, *data frames* and the `apply` family of iterator functions.
+
+
+## Factors
+
+The term *factor* refers to a data type used to store *categorical variables*. The difference between a categorical variable
+and a continuous variable is that a categorical variable can belong to a limited number of categories. A continuous variable, on the
+other hand, can correspond to an infinite number of values.
+
+It is important that R knows whether it is dealing with a continuous or a categorical variable, as statistical models treat both types differently.
+
+A good example of a categorical variable is sex. In many circumstances we can limit the sex categories to ”Male” or ”Female”:
+```{r}
+sex <- factor( c("Male", "Female", "Female", "Male", "Male") )
+sex
+```
+
+Factors have an attribute called *levels*, which represent the unique categories.
+```{r}
+levels(sex)
+```
+
+The simplest thing we can do with a factor is compute a frequency table:
+```{r}
+table(sex)
+```
+
+Comparisons and coercion can be deployed on factors:
+```{r}
+sex == "Female"
+as.numeric(sex)
+```
+
+### Ordered Factors {-}
+
+There are two types of categorical variables: *nominal* and *ordinal*.
+
+A nominal variable is a categorical variable without an implied order. This means that it is impossible to say that one value is greater than another. 
+For example, 
+
+```
+animals <- c("Elephant", "Giraffe", "Donkey", "Horse")
+```
+
+Here, it is impossible to say that one value is greater than or less than another.
+
+In contrast, ordinal variables do have a natural ordering. 
+Consider for example the categorical variable temperature vector with the
+categories: “Low“, “Medium“ and “High“. 
+
+```
+temperature <- c("High","Medium","Low")
+```
+
+Here it is clear that `"High"` > `"Medium"` > `"Low"`.
+
+
+To deal with the natural ordering between different categories of a factor, we need to create an ordered factor:
+```{r}
+speed <- c("medium", "slow", "slow", "medium","fast")
+speed <- factor(speed, ordered = TRUE, levels = c("slow", "medium", "fast"))
+speed
+```
+
+The ordered factor enables us to compare different elements:
+```{r}
+speed[2] > speed[5]
+```
+
+
+#### Exercise {-}
+
+Which indices of `tempi` indicate [tempi](https://en.wikipedia.org/wiki/Tempo#Basic_tempo_markings) greater than 108bpm?
+```{r}
+tempi <- c("Adagio", "Largo", "Moderato", "Andante", "Adagio", "Allegro", "Largo", "Presto", "Moderato", "Adagio")
+
+table(factor(tempi))
+
+tempi <- factor(tempi, ordered=TRUE, levels = c("Largo", "Adagio", "Andante", "Moderato", "Allegro", "Presto"))
+which(tempi >= "Moderato")
+```
+
+
+## Lists
+
+A *list* in R allows you to gather a variety of objects under one name in an ordered way.
+
+These objects do not have to be of the same class or of the same length:
+```{r}
+# Vector with numerics from 1 up to 10
+my.vec <- 1:10
+# Matrix with numerics from 1 up to 9
+my.mat <- matrix(1:9, ncol = 3)
+# A numeric value (scalar)
+my.sca <- 53
+
+# Construct list with these different elements:
+my.list <- list(vec = my.vec, mat = my.mat, sca = my.sca)
+my.list
+```
+
+The names() function can be used to show the names of the list elements, or to rename them.
+```{r}
+names(my.list)
+
+names(my.list) <- c("a", "b", "c")
+my.list
+```
+
+
+
+There are several ways to refer to an element of a list. The following three expressions are equivalent:
+```{r}
+my.list$c
+my.list[["c"]]
+my.list[[3]]
+```
+
+To select a single element from a list, we use `[[]]`.
+
+
+#### Exercise {-}
+
+What happens if you try to use `[]` to select a single element from a list? Or `[[]]` to select a subset of a list?
+```{r}
+my.list[[1]] # returns a vector
+my.list[1] # returns a list with one element.
+
+my.list[c(FALSE, TRUE, TRUE)] # returns a list with two elements
+my.list[[c(FALSE, TRUE, TRUE)]] # produces an error
+```
+
+
+
+
+## Data frames
+
+A data frame is a special kind of list, and is the most commonly used data type for statistical analysis in R. 
+A data frame uses the variables of a dataset as columns and the observations as rows.
+
+Here, different variables may have different classes (e.g. character, numeric, logical), and the data frame will preserve this.
+
+For example, when doing a market research survey, we often have questions such as:
+
+- 'Are you married?' or 'yes/no' questions (logical)
+- 'How old are you?' (numeric)
+- 'What is your opinion on this product?' or other ’open-ended’ questions (character)
+
+To construct a data frame in R, we use the `data.frame()` function. As arguments, we pass pre-defined vectors that become
+the different columns of the data frame. The argument vectors should all have the same length.
+
+```{r}
+# Definition of vectors
+name <- c("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune")
+type <- c("Terrestrial", "Terrestrial", "Terrestrial", "Terrestrial", "Gas giant", "Gas giant", "Ice giant", "Ice giant")
+mass <- c(0.0553, 0.815, 1, 0.107, 317.8, 95.2, 14.5, 17.1)
+diameter <- c(0.383, 0.949, 1, 0.532, 11.21, 9.45, 4.01, 3.88)
+day.length <- c(175.9, 116.8, 1, 1.03, 0.414, 0.444, 0.718, 0.671)
+distance.from.sun <- c(0.387, 0.723, 1, 1.52, 5.20, 9.58, 19.2, 30.05)
+orbital.period <- c(0.241, 0.615, 1, 1.88, 11.9, 29.4, 83.7, 163.7)
+rings <- c(FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE)
+
+# Create a data frame from the vectors
+planets <- data.frame(name, type, mass, diameter, day.length, distance.from.sun, orbital.period, rings)
+
+planets
+```
+
+
+Note that the default behaviour is to automatically convert character data to factors. 
+This can be prevented by setting the argument `stringsAsFactors = FALSE`.
+
+When working with large data sets, a data analyst's first task is to develop a clear understanding of its structure and main elements. 
+Therefore, it is often useful to show only a small part of the entire data set.
+
+`head()` and `tail()` print out the first and last observations of a data frame.
+
+```{r}
+head(planets, n=3)
+```
+
+```{r}
+tail(planets, n=3)
+```
+
+
+
+To get a rapid overview of the data, the function `str()` is used, which shows the structure of the dataset in hand. 
+For a data frame it tells us:
+
+- The total number of observations
+- The total number of variables
+- A full list of the variables names
+- The data type of each variable
+- The first few observations for each variable
+
+```{r}
+str(planets)
+```
+
+
+To select data from the data frame, we can either treat it as a matrix:
+
+```{r}
+# this returns a scalar
+planets[2,4] # a single element indexed by row and column
+```
+
+```{r}
+# this returns a vector
+planets[1:3,"mass"] # a single column for a subset of rows
+```
+
+```{r}
+# these both return a data frame
+planets[1:3,] # a subset of rows
+planets[rings,] # selects the planets with rings
+```
+
+or we can treat the data frame as a list of vectors:
+
+```{r}
+planets[[3]]
+planets$rings
+```
+
+
+
+Another way to select create a subset of a data frame based on some condition is to use the `subset()` function.
+
+```{r}
+subset(planets, type=="Ice giant")
+```
+
+To sort the data according to a certain variable in the data set, the function `order()` is used.
+
+```{r}
+order(planets$diameter)
+planets <- planets[order(planets$diameter),]
+planets
+```
+
+
+#### Exercise {-}
+
+Add a new column to `planets` to show the density of each planet relative to Earth (correct to 3 d.p.).
+
+```{r}
+radius <- planets$diameter / 2
+names(radius) <- planets$name
+
+volume <- (4/3)*pi*radius^3
+volume <- volume / volume["Earth"]
+
+density <- round(planets$mass / volume, digits=3)
+
+planets$density <- density
+planets
+```
+
+
+
+## The `apply` family
+
+Bad design of loops is the most common source of inefficient R code.
+
+Whenever you’re using a `for` loop, you might want to revise your code and see whether you can use one of the `apply` family functions
+instead. These are set of compact loop commands for a variety of data structures. Here we will look at the variants `lapply`, `sapply` and `tapply`.
+
+### `lapply` {-}
+
+The simplest `apply` family function is `lapply`:
+
+```
+lapply(X, FUN, ...)
+```
+
+`lapply` takes a vector or list `X`, and applies the function `FUN` to each of its elements. 
+If `FUN` requires additional arguments, you need to pass them after you’ve specified `X` and `FUN` (indicated as `...` in the function definition above).
+The output of `lapply()` is a *list* of the same length as `X`, where each element is the result of applying `FUN` to the corresponding element of `X`.
+
+First let's select some continuous-valued columns from the planets data.
+```{r}
+planets.subset <- planets[3:7]
+planets.subset
+```
+
+Now we can use `lapply` to find the means:
+```{r}
+lapply(planets.subset, mean)
+```
+Note that `lapply` coerces the data frame to a list.
+
+
+### `sapply` {-}
+
+`sapply` is a useful variant of `lapply` which will attempt to simplify the output to a vector or matrix where possible, otherwise it returns a list.
+```{r}
+sapply(planets.subset, mean)
+```
+
+Compare the `sapply` output (a named vector) with the `lapply` output above (a list).
+
+If the output of `FUN()` is a vector, `lapply` makes a list of vectors, which `sapply` interprets as a matrix:
+```{r}
+lapply(planets.subset, round, digits=1)
+```
+
+```{r}
+sapply(planets.subset, round, digits=1)
+```
+
+### `tapply` {-}
+
+`tapply` is another `apply` family function which can be useful for working with data frame columns. It has the form
+
+```
+tapply(X, INDEX, FUN, ...)
+```
+
+Here, `INDEX` is a list of factors which is the same length as `X`. The input data `X` will be grouped according to the levels of `INDEX` before applying `FUN`.
+```{r}
+tapply(planets$diameter, planets$type, mean)
+```
+
+
+#### Exercise {-}
+
+Can you construct a new data frame containing the numerical attributes for an "average" planet of each of the three types? (Hint: make a matrix first and then coerce to a data frame using `as.data.frame()`)
+```{r}
+# add the density column
+planets.subset2 <- cbind(planets.subset, planets["density"]) 
+
+# a function to get the medians for a particular column, grouped by type
+get.avg <- function(x){
+  tapply(x, planets$type, median)
+}
+
+# use sapply to construct a matrix
+avg.mat <- sapply(planets.subset2, get.avg)
+avg.mat <- round(avg.mat,2)
+
+# coerce to a data frame
+avg.df <- as.data.frame(avg.mat)
+avg.df
+```
+
+
+
+## Importing data
+
+R allows for importing files of the following types:
+
+![](datainput.png)
+
+*Flat files* are simple text file formats that structure data as tables. 
+
+The most straightforward way to read tabular data into a data frame is to import from a `.csv` (comma separated value) file.
+The advantage of this is that `.csv` is a standard format.
+
+The file `states.csv` contains a *header row*, giving the names of the fields:
+```
+state,capital,pop_mill,area_sqm
+South Dakota,Pierre,0.853,77116
+New York,Albany,19.746,54555
+Oregon,Salem,3.970,98381
+Vermont,Montpelier,0.627,9616
+Hawaii,Honolulu,1.420,10931
+```
+
+We can load it using the `read.csv` function:
+```{r}
+my.df <- read.csv("states.csv", stringsAsFactors = FALSE)
+my.df
+```
+
+
+Similarly, the most convenient format to output data frames is csv.
+```{r}
+write.csv(my.df,"my.csv")
+```
+
+
+Here are a few useful functions for understanding the structure of your data:
+- `class()` - Class of data object
+- `dim()` - Dimensions of data
+- `names()` - Column names
+- `str()` - Preview of data with helpful details
+- `summary()` - Summary of data
+
+
+
+#### Exercise {-} 
+
+Load the `mlb_players.csv` data into your workspace. This contains biometric data for Major League Baseball players.
+
+Try the following to get a feel for the data:
+
+1. How many records and how many fields?
+2. What are the column names?
+3. View the structure of the data frame.
+4. View a `summary()` of the data frame.
+
+```{r}
+mlb <- read.csv("mlb_players.csv")
+
+dim(mlb) # 1034 records with 6 fields
+names(mlb)
+str(mlb)
+summary(mlb)
+```
+
+Write a function `bmi` that takes a person's weight in lbs and height in inches and returns their [Body Mass Index](https://www.nhs.uk/common-health-questions/lifestyle/what-is-the-body-mass-index-bmi/).
+```{r}
+bmi <- function(lbs, inches){
+  ms <- 0.0254 * inches
+  kgs <- 0.45359 * lbs
+  kgs / (ms^2)
+}
+
+# example
+bmi(187,72)
+```
+
+Using your function, add a new column `BMI` to the data frame.
+```{r}
+mlb$BMI <- bmi(mlb$Weight.lbs, mlb$Height.inches)
+head(mlb)
+```
+
+According to BMI, what percentage of players would be considered overweight or obese?
+
+```{r}
+over <- mlb$BMI > 25
+sum(over) / length(over) * 100 
+```
+
+
+Find the average BMI for each baseball position. (Hint: use `tapply()`)
+
+```{r}
+mean.BMI <- tapply(mlb$BMI, mlb$Position, mean)
+mean.BMI
+```
+
+
+
+
+
+# Data Visualisation in R
+
+Graphical tools help us understand a dataset. Our ability to interpret patterns visually is a key strength in data analysis.
+
+Thee are two basic types of data visualisations:
+
+1. Exploratory visualisations help us understand the data.
+2. Explanatory visualisations help us share our understanding with others.
+
+Let's try some exploration of the `mlb_players` dataset.
+
+
+## Histogram
+
+Histograms are generated by the function `hist()` using a default binning strategy. 
+To specify the number of bins, modify the argument `breaks`. 
+```{r}
+hist(mlb$BMI, breaks = 10, col="grey")
+```
+
+Alternatively, we can specify the individual breakpoints by providing `breaks` as a vector.
+```{r}
+hist(mlb$BMI, breaks = c(min(mlb$BMI),25,30,max(mlb$BMI)), col=c("green","yellow","red"), main="MLB Players", xlab="BMI")
+```
+
+Note the additional optional arguments for the title and x-axis label.
+
+
+#### Exercise {-}
+
+Try out some histograms for the other continuous variables in the dataset.
+
+```{r}
+hist(mlb$Height.inches)
+hist(mlb$Weight.lbs)
+hist(mlb$Age)
+```
+
+
+## Bar plot
+
+For categorial variables, we first need to construct a frequency table, which can then be used with the `barplot()` function.
+The optional argument `las=2` rotates the labels through 90$^{\circ}$
+```{r}
+freq <- table(mlb$Team)
+barplot(freq, las=2)
+```
+
+
+
+## Scatter plot
+
+We can easily construct a 2D scatter plot. Here, a regression line is constructed using the `lm()` function, which fits linear models.
+```{r}
+plot(mlb$Age, mlb$BMI, xlab="Age", ylab="BMI")
+
+# Add regression line
+abline(lm(mlb$BMI ~ mlb$Age), col="red")
+```
+
+## Box plot
+
+R can easily make box-and-whisker plots for a continuous variable, split between the levels of a factor, e.g.
+```{r}
+boxplot(mlb$BMI ~ mlb$Position, las=2, horizontal=TRUE, cex.axis=0.5, xlab="BMI", ylab="Position")
+```
+
+Here, we use `cex.axis=0.5` to reduce the size of the labels.
+By default, the whiskers show the most extreme datum that is still within 1.5$\times$ the interquartile range.
+
+
+
+#### Exercise {-}
+
+The box plot is nice, but we want to tidy it up for a presentation. 
+Can you re-order the boxes from smallest to largest average BMI? (Hint: use an ordered factor)
+```{r}
+# We previously calculated the mean BMI for each Position
+mean.BMI
+
+# from smallest to largest mean BMI, the order of Positions is
+order(mean.BMI)
+
+# or in terms of Position names,
+names(mean.BMI)[order(mean.BMI)]
+
+# We can use this ordering of levels to rewrite the Position column as an ordered factor:
+mlb$Position <- factor(mlb$Position, ordered = TRUE, levels=names(mean.BMI)[order(mean.BMI)])
+
+# Finally, we redraw the box plot.
+boxplot(mlb$BMI ~ mlb$Position, las=2, horizontal=TRUE, cex.axis=0.5, xlab="BMI", ylab="Position")
+```
+
+
+
+# Further Reading {-}
+
+## Books {-}
+
+- Grolemung G, [Hands-On Programming with R](https://ebookcentral.proquest.com/lib/imperial/reader.action?docID=1734320) (2014)
+- Peng RD, [R Programming for Data Science](https://bookdown.org/rdpeng/rprogdatascience/) (2019)
+- Grolemung G & Wickham H, [R for Data Science](https://r4ds.had.co.nz/) (2017)
+- Chang W, [R Graphics Cookbook](https://r-graphics.org/) (2019)
+
+## Web resources {-}
+
+- RStudio Primers: https://rstudio.cloud/learn/primers
+- Packages: https://www.statmethods.net/interface/packages.html
+- Graphs: https://www.statmethods.net/graphs/index.html
+- Data management: https://www.statmethods.net/management/index.html
+- Statistics: https://www.statmethods.net/stats/index.html
+
+
+# Acknowledgements {-}
+
+Many thanks to Anupriya, who developed the original version of this course.
+
+Planets data set taken from https://nssdc.gsfc.nasa.gov/planetary/factsheet/planet_table_ratio.html
+
+Major League Baseball data set taken from https://people.sc.fsu.edu/~jburkardt/data/csv/csv.html
+
