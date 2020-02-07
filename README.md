@@ -17,6 +17,11 @@ Download this repository to your computer as a ZIP file and unpack it.
 
 Open `r_programming.nb.html` in your web browser to get started.
 
+Alternatively, you can run the notebooks online using Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/johnpinney/r_programming/master?urlpath=rstudio)
+
+
+
+
 ## Evaluation
 
 Your feedback is very important to the Graduate School as we are continually trying to improve the training we offer.
