@@ -1,0 +1,554 @@
+# R as a Calculating Environment
+
+The simplest R commands are just mathematical expressions, which are evaluated and the answer is printed out to the console.
+
+```{r}
+2 + 2
+```
+
+You can write numbers as decimals or using scientific notation, e.g. `0.001` is equivalent to `1e-3`.
+
+
+## Arithmetic operators
+
+- Addition: `+`
+- Subtraction: `-`
+- Multiplication: `*`
+- Division: `/`
+- Exponentiation: `ˆ` (i.e. 'to the power of')
+- Integer Division: `%/%` (i.e. division without allowing fractions)
+- Modulo: `%%` (i.e. the remainder after integer division)
+
+Note that multiplication/division take place before addition/subtraction. You can change the order of operations using parentheses `()`. e.g.
+
+```{r}
+5 + 6 / 2
+```
+
+vs.
+
+```{r}
+(5 + 6) / 2
+```
+
+
+#### Exercise 2a {-}
+
+1. You have 3 pound coins, 3x 50p, 3x 20p and 4x 5p. Flapjacks cost 89p. How many can you buy?
+```{r}
+# write the expression below and use Ctrl-Shift-Enter to evaluate it
+
+```
+
+2. How much money will you have left?
+```{r}
+
+```
+
+
+## Mathematical functions and constants
+
+There are a number of basic mathematical functions available, e.g.
+
+- `sqrt()`: square root
+- `sin()`, `sinh()` and the other trigonometric / hyperbolic functions
+- `asin()`, `asinh()` and the other inverse functions
+- `exp()`: natural exponential function
+- `log()`, `log10()`: logarithmic functions
+- `abs()`: absolute value
+- `round()`: round to the closest integer
+- `floor()`: round down
+- `ceiling()`: round up
+
+Also `pi` for mathematical $\pi$
+
+e.g.
+```{r}
+cos(pi/3)
+```
+
+
+
+
+#### Exercise 2b {-}
+
+What happens when the input provided is outside the domain of a function (e.g. log(-4))?
+
+```{r}
+
+```
+
+
+
+
+## Basic data types in R
+
+R works with numerous data types. Here are some of the most basic ones:
+
+- Decimal values like `4.5` are called `numeric`.
+- Natural numbers written like `4L` are called `integer`. Integers are also `numeric`.
+- Boolean values (`TRUE` or `FALSE`) are called `logical`.
+- Text (or string) values (`"a"`,`"apple"`,`"54"` etc.) are called `character`.
+- Complex numbers (e.g. `5+3i`) are called `complex`.
+
+To check the data type of an object, the function `class()` is used. You can also test data types using `is.*()`, e.g.
+```{r}
+class(154)
+class(154L)
+is.integer(154)
+is.logical(FALSE)
+```
+
+
+
+
+## Variables
+
+A **variable** is a basic concept in all programming. You can think of a
+variable as a labelled container that allows you to store a value (e.g. 55) or an object (e.g. a data structure).
+
+The assignment operator `<-` is preferred for variable assignment in R, but `=` will also work.
+
+```{r}
+a <- 5
+b = 9
+```
+
+You can then use this variable’s name to easily access the value or the object that is stored within this variable.
+Use `print()` or `show()` to display values in the console window. Putting parentheses around an expression is another alternative.
+
+```{r}
+print(a)
+show(b)
+(a+b)
+```
+
+You can easily change the value assigned to a variable.
+```{r}
+a <- 101
+print(a)
+
+a <- a + 10
+print(a)
+```
+
+The variable is retained in memory (see the environment window at top right) until deletion with `rm()`.
+
+```{r}
+rm(a)
+print(a)
+```
+
+Note that rm is *not* reversible.
+
+Variables should have names that are *meaningful*, and should follow the R syntax
+rules, that the name should consist of only
+
+- letters (a-z / A-Z)
+- numbers
+- period `.`
+- underscore `_`
+
+A name must start with a letter or period. Names starting with a period are hidden by default.
+
+A common problem is trying to use names that are already in use by R:
+e.g. reserved words like `if` or `break` or system objects like `mean`, `TRUE`,
+and `pi`.
+
+Another common irritation for new users is that R is *case sensitive*,
+so `T` (a system representation of logical true) is different to `t` (function for matrix transpose).
+
+
+
+## Logical expressions
+
+The comparison operators known to R are:
+
+- `<` for less than
+- `>` for greater than
+- `<=` for less than or equal to
+- `>=` for greater than or equal to
+- `==` for equal to each other
+- `!=` not equal to each other
+
+e.g.
+```{r}
+a <- 21
+a > 12
+```
+
+The output of a logical expression is one of the *boolean* values `TRUE` or `FALSE`.
+
+We will also need to handle more complex comparisons, like ”greater than 12, and even.” Such comparisons require the *logical operators*:
+
+- `!` logical NOT
+- `&` logical AND
+- `∣` logical OR
+
+```{r}
+a > 12 & a %% 2 == 0
+```
+
+
+## Precision and rounding error
+
+R calculates all values to a high precision, but will only display the first 7 significant figures by default.
+You can change this using a command like `options(digits = 10)` (which shows the first 10 digits).
+
+However, only fractions whose denominator is a power of 2 can be represented exactly by R.
+All other real values are subject to rounding error, which can cause a lot of confusion when testing for equality, e.g.
+
+```{r}
+sqrt(2) * sqrt(2) == 2
+```
+
+To get around this issue, we use the function `all.equal()`, which returns `TRUE` if the difference between its two arguments is less than R's level of accuracy:
+
+```{r}
+all.equal(sqrt(2)*sqrt(2),2)
+```
+
+
+## Vectors
+
+Vectors are the fundamental data structure in R. A vector is an
+*integer-indexed* one-dimensional array that can hold of data of the
+*same* type.
+
+```{r}
+my.integers <- 1:10 # sequence of integers from 1 to 10
+my.integers
+length(my.integers) # length of a vector
+```
+
+
+To create a vector in R, the combine function `c()` is used. For
+example:
+```{r}
+numeric.vector <- c(1, 10, 49)
+character.vector <- c( "a", "b", "c")
+logical.vector <- c(TRUE, FALSE, TRUE)
+```
+
+
+
+Other useful functions for creating numeric vectors include `seq()` and `rep()`.
+```{r}
+seq(from=1, to=7, by=3)
+rep(1:4, times=2)
+```
+
+
+You can give a name to the elements of a vector with the names() function.
+```{r}
+names(numeric.vector) <- character.vector
+show(numeric.vector)
+```
+
+
+### Operations on vectors {-}
+
+Different types of operations are appropriate for vectors of different type.
+Perhaps the most familiar is arithmetic for numeric vectors.
+It is important to understand that if you perform arithmetic operations
+on two vectors in R, it performs *element-wise* operation:
+
+```{r}
+x <- c(6.5, 4.7, 1.2, -3.3)
+y <- c(1, 2, 3, 4)
+
+x+y
+x/y
+```
+
+
+#### Exercise 2c {-}
+
+1. What happens when we try to do arithmetic with vectors that are of different lengths? Or when we mix a scalar with a vector?
+```{r}
+x <- c(6.5,  1.2, 4.7, -3.3)
+y <- c(1, 2)
+
+```
+
+2. Try applying some mathematical functions to a numeric vector. Use `plot(x,y)` to see the results
+```{r}
+x <- -10:10
+y <-
+
+```
+
+
+3. Find the `sum`, `mean` and `median` of the data provided.
+```{r}
+my.data <- c(6.1, 2.7, 1.2, 3.4, 2.0, 8.0, 3.3, 6.1, 1.2)
+
+```
+
+Some other useful functions for vectors: `unique()`,`prod()`,`max()`,`min()`,`range()`,`var()`,`sd()`,`sample()`,`sort()`,`rev()`,`append()`.
+
+4. Try these out below to see how they work.
+```{r}
+
+```
+
+
+
+### Selection by index {-}
+
+We often need to select elements of numeric vectors (or other data
+structures). Such selection can be implemented a number of ways.
+The simplest method is numerical indexing using square brackets `[]`.
+
+```{r}
+x <- 20:10
+x[1]
+index <- c(1, 3, 5) # a vector of the indices we want
+x[index]
+```
+
+Note that indices in R start from `1`, not `0` as in many other languages.
+
+If names have been assigned to the vector elements, we can select by name instead of by numeric position:
+
+```{r}
+numeric.vector["c"]
+```
+
+
+### Selection by comparison {-}
+
+It is often useful to do conditional selection. For example, to select only the
+positive values from a vector:
+
+```{r}
+x <- -5:5
+x
+x >= 0
+
+index <- x >=0
+x[index]
+which(index)
+```
+
+The vector `index` is logical, containing element-wise Boolean values (`TRUE` or `FALSE`) for the comparison.
+The `[]` operator handles a logical vector by selecting only those values that are true.
+
+We use `which(x)` to find the index positions of the `TRUE` elements of a logical vector `x`.
+
+
+
+The functions `any()` and `all()` can also be used to test the elements of a vector. These return a single Boolean, e.g.
+
+```{r}
+x <- 20:12
+x
+
+any(x == 16)
+all(x > 12)
+```
+
+Another useful operator is `%in%`, which tells you whethe a vector contains a particular object, e.g.
+
+```{r}
+x <- 3:9
+
+5 %in% x
+0 %in% x
+```
+
+
+
+#### Exercise 2d {-}
+Look at the following expressions. Can you describe what they do?
+```{r}
+x <- -5:5
+index <- x>0
+sum(index)
+sum(x[index])
+```
+
+Note that here the vector `index` is logical, containing the values `FALSE` and `TRUE`.
+The `sum()` function has *coerced* these logical values to  numeric ones (reading `FALSE` as `0` and `TRUE` as `1`).
+This automatic coercion makes R very flexible, but can also be a source of confusion.
+
+To explicitly coerce objects from one class to another, we can use the `as.*` functions, e.g.
+```{r}
+index
+as.numeric(index)
+```
+
+
+### Combining logical vectors {-}
+
+Logical vectors can be combined element-wise with `!` (logical NOT), `&` (logical AND ) and `∣` (logical OR).
+
+```{r}
+x <- 20:10
+index.odd <- (x %% 2)
+index.odd
+
+index.gt15 <- x > 15
+x[index.odd & index.gt15]
+```
+
+The vector `index.odd` is actually numeric, containing values `0` and `1`.
+The `&` operator has coerced these numeric values to logical ones (reading `0` as `FALSE` and any other number as `TRUE`).
+
+
+#### Exercise 2e {-}
+
+Which indices of `x` have values between 11 and 18 and are divisible by 3? Use a logical expression.
+```{r}
+
+```
+
+
+
+### Vector transformations {-}
+
+Having selected a subset of indices, we can make conditional assignments, e.g.
+
+```{r}
+x <- 20:10
+x[x < 15] <- -1 # assign elements less than 15 to be -1
+
+x
+```
+
+
+
+#### Exercise 2f {-}
+
+You have started a business selling flapjacks outside the underground station.
+The vectors below show your income and expenses for the first five days of trading.
+
+Create the following variables:
+
+1. `profit`, your daily profit (a vector).
+2. `profit.total`, your overall profit at the end of the week (a scalar).
+3. `profitable.days`, the names of the days on which you made a positive profit (a vector).
+
+```{r}
+days <- c("Monday", "Tuesday", "Wednesday","Thursday", "Friday")
+income <- c(140, 101, 25, 42, 120)
+expenses <- c(220, 23, 0, 51, 34)
+
+```
+
+4. For tax reasons, you decide to donate any daily profit over £50 to charity.
+Calculate your daily donations (a vector).
+
+```{r}
+
+```
+
+
+
+
+## Matrices
+
+In R, a matrix is a two-dimensional collection of elements of the
+same data type (numeric, character, or logical) arranged into a
+fixed number of rows and columns.
+
+A matrix is constructed from a vector by filling positions by column or by row:
+```{r}
+A <- matrix(1:6, nrow=3) # default filling is by column
+A
+dim(A) # matrix dimensions (rows first)
+```
+
+```{r}
+B <- matrix(1:6, byrow=TRUE, nrow=3) # switch to filling by row
+B
+dim(B) # matrix dimensions (rows first)
+```
+
+
+The functions `colnames()` and `rownames()` are used to add names for the the columns and the rows of a matrix.
+```{r}
+colnames(A) <- c("red", "green")
+rownames(A) <- c("apple", "pepper", "tomato")
+A
+```
+
+The functions `rowSums()` and `colSums()` conveniently calculate the totals for each row and column of a matrix.
+```{r}
+colSums(A)
+rowSums(A)
+```
+
+
+A diagonal matrix can be constructed using the function `diag()`, e.g.
+```{r}
+diag(4)
+diag(4, x=1:4)
+```
+
+
+Selection (and modification) of elements of a matrix uses the `[]` operator, but with two indices:
+```{r}
+A[2,2] # single element
+A[,2] # single column
+A[2,] # single row
+```
+
+If only one index is provided, an element is returned by treating the matrix as a vector, read column-wise.
+```{r}
+A[3]
+B[3]
+```
+
+
+The functions `cbind()` and `rbind()` are available for concatenating matrices (or vectors) by row (row bind) or column (column bind).
+The dimensions must conform.
+
+
+#### Exercise 2g {-}
+
+Use `cbind()` and `rbind()` to combine `A` and `B`. What are the dimensions of the resulting matrices?
+```{r}
+
+```
+
+
+
+### Matrix Transformations {-}
+
+As with vectors, element-wise arithmetic can be applied to matrices.
+```{r}
+1 + A / 2
+```
+
+Note that `*` operates element-wise. For matrix multiplication, use `%*%`
+```{r}
+C <- matrix(1:4,nrow=2)
+
+C
+C * C
+C %*% C
+```
+
+
+Many functions can also be applied element-wise to matrices, e.g.
+```{r}
+log(A)
+```
+
+Some other functions taking matrix arguments:
+
+- `nrow(A)`
+- `ncol(A)`
+- `det(A)` (the determinant of `A`)
+- `t(A)` (the transpose of `A`)
+- `solve(A,B)` returns `x` such that `A %*% x == B`
+
+If `A` is invertible, `solve(A)` returns the matrix inverse of `A`:
+```{r}
+invC <- solve(C)
+invC
+C %*% invC
+```
+
+

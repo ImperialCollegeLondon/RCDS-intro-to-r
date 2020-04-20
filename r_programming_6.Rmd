@@ -1,0 +1,24 @@
+# Further Reading {-}
+
+## Books {-}
+
+- Grolemung G, [Hands-On Programming with R](https://ebookcentral.proquest.com/lib/imperial/reader.action?docID=1734320) (2014)
+- Peng RD, [R Programming for Data Science](https://bookdown.org/rdpeng/rprogdatascience/) (2019):
+- Grolemung G & Wickham H, [R for Data Science](https://r4ds.had.co.nz/) (2017):
+
+## Web resources {-}
+
+- RStudio Primers: https://rstudio.cloud/learn/primers
+- Packages: https://www.statmethods.net/interface/packages.html
+- Graphs: https://www.statmethods.net/graphs/index.html
+- Data management: https://www.statmethods.net/management/index.html
+- Statistics: https://www.statmethods.net/stats/index.html
+
+
+# Acknowledgements {-}
+
+Many thanks to Anupriya, who developed the original version of this course.
+
+Planets data set taken from https://nssdc.gsfc.nasa.gov/planetary/factsheet/planet_table_ratio.html
+
+Major League Baseball data set taken from https://people.sc.fsu.edu/~jburkardt/data/csv/csv.html
