@@ -15,7 +15,7 @@ We will not look at statistical testing or advanced data manipulation, as these 
 
 Download this repository to your computer as a ZIP file and unpack it.
 
-Open `r_programming.nb.html` in your web browser to get started.
+Open `r_programming.html` in your web browser to get started.
 
 Alternatively, you can run the notebook online using Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/johnpinney/r_programming/master?urlpath=rstudio)
 
