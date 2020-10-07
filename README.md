@@ -15,7 +15,7 @@ We will not look at statistical testing or advanced data manipulation, as these 
 ## Installing R and RStudio
 
 Please ensure that you have both R and RStudio installed and working before the course:                                              
-* http://www.r-project.org/
+* https://www.r-project.org/
 * https://rstudio.com 
 
 R and RStudio can also be installed via the Anaconda data science platform: 
