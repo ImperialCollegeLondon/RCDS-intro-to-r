@@ -14,7 +14,7 @@ We will not look at statistical testing or advanced data manipulation, as these 
 
 ## Installing R and RStudio
 
-Please ensure that you have both R and RStudio installed and working before the course:                                              
+Please ensure that you have up-to-date versions of both R and RStudio installed and working before the course:                                              
 * https://www.r-project.org/
 * https://rstudio.com 
 
