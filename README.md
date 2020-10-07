@@ -11,13 +11,25 @@ This course provides an introduction to R as a programming language, including:
 
 We will not look at statistical testing or advanced data manipulation, as these are beyond the scope of this introductory course.
 
-## Instructions
+
+## Installing R and RStudio
+
+Please ensure that you have both R and RStudio installed and working before the course:                                              
+* http://www.r-project.org/
+* https://rstudio.com 
+
+R and RStudio can also be installed via the Anaconda data science platform: 
+* https://www.anaconda.com.
+
+
+## Getting Started
 
 Download this repository to your computer as a ZIP file and unpack it.
 
-Open `r_programming.html` in your web browser to get started.
+Open `r_programming.nb.html` in your web browser to get started.
 
 Alternatively, you can run the notebook online using Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/johnpinney/r_programming/master?urlpath=rstudio)
+
 
 
 ## Evaluation
