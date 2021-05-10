@@ -68,15 +68,14 @@ Before you start work, please check your working directory:
 getwd()
 ```
 
-If necessary, use `setwd()` to change this to the directory containing the data for this workshop:
+We need the working directory to be the directory containing the data for this workshop. If necessary, you can change the working directory using the files window in RStudio (bottom right).
+Navigate to the directory you want and click the cog icon for the "Set as Working Directory" option.
+
+Alternatively, if you know the path to your working directory, you can use `setwd()`:
 
 ```{r}
 setwd("path/to/my/working/directory")
 ```
-
-You can also change the working directory using the files window in RStudio (bottom right).
-Navigate to the directory you want and click the cog icon for the "Set as Working Directory" option.
-
 
 
 ## Help

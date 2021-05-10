@@ -112,7 +112,7 @@ while (a <= 10) {
 #### Exercise 3b {-}
 
 
-Complete the code to find the first Fibonacci number greater than 100.
+Complete the code to find the first [Fibonacci number](https://en.wikipedia.org/wiki/Fibonacci_number) greater than 100.
 ```{r}
 F <- c(1,1)
 n <- length(F)
@@ -149,7 +149,7 @@ a bit more complex to read and write.
 
 #### Exercise 3c {-}
 
-Complete the `for` loop to calculate the factorial of a given number, `n`
+Complete the `for` loop to calculate the [factorial](https://en.wikipedia.org/wiki/Factorial) of a given number, `n`
 ```{r}
 n <- 6
 n_factorial <- 1
@@ -228,7 +228,7 @@ my_fun(3)
 
 #### Exercise 3d {-}
 
-1. Create a new function, `my.factorial`, which returns the factorial of its (integer) argument.
+1. Starting with the solution to exercise 3c, create a new function, `my.factorial`, that returns the factorial of its (integer) argument.
 ```{r}
 
 ```

@@ -398,7 +398,7 @@ The `&` operator has coerced these numeric values to logical ones (reading `0` a
 
 #### Exercise 2e {-}
 
-Which indices of `x` have values between 11 and 18 and are divisible by 3? Use a logical expression.
+Which elements of `x` have values between 11 and 18 and are divisible by 3? Use a logical expression.
 ```{r}
 
 ```
@@ -521,7 +521,7 @@ As with vectors, element-wise arithmetic can be applied to matrices.
 1 + A / 2
 ```
 
-Note that `*` operates element-wise. For matrix multiplication, use `%*%`
+Note that `*` operates element-wise. For matrix multiplication, we need to use `%*%`
 ```{r}
 C <- matrix(1:4,nrow=2)
 
