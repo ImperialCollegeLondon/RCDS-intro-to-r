@@ -193,7 +193,7 @@ planets[1:3,"mass"] # a single column for a subset of rows
 ```{r}
 # these both return a data frame
 planets[1:3,] # a subset of rows
-planets[rings,] # selects the planets with rings
+planets[planets$rings,] # selects the planets with rings
 ```
 
 or we can treat the data frame as a list of vectors:
