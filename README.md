@@ -1,6 +1,6 @@
 # R Programming
 
-This course provides an introduction to R as a programming language, including: 
+This course provides an introduction to R as a programming language, including:
 
 - basic calculations
 - data structures (vectors, matrices and data frames)
@@ -13,9 +13,9 @@ We will not look at statistical testing or advanced data manipulation, as these 
 
 ## Instructions
 
-Download this repository to your computer as a ZIP file and unpack it.
+Download this repository to your computer as a ZIP file (via the big green button at the top of this page) and unpack it. Windows users should make sure that the files are actually extracted to create a real directory (the folder icon will not have a zip). Use of networked file systems is likely to cause problems with RStudio, so it is advisable to put this directory on your local storage (e.g. your desktop).
 
-Open `r_programming.html` in your web browser to get started.
+Open `r_programming_1.html` in your web browser to get started.
 
 Alternatively, you can run the notebook online using Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/johnpinney/r_programming/master?urlpath=rstudio)
 
