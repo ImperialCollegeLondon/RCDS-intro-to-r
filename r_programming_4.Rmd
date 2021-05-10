@@ -1,6 +1,6 @@
 # Data Handling in R
 
-R has been designed as a language for data analysis. It provides a number of built-in data structures and functions to make common data handling tasks easier. Here we will look at *factors*, *lists*, *data frames* and the `apply` family of iterator functions.
+R has been designed as a language for data analysis. It provides a number of built-in data structures and functions to make common data handling tasks easier. Here we will look at *factors*, *lists* and *data frames*.
 
 
 ## Factors
@@ -33,6 +33,7 @@ vert.class == "Bird"
 as.numeric(vert.class)
 ```
 
+
 ### Ordered Factors {-}
 
 There are two types of categorical variables: *nominal* and *ordinal*.
@@ -41,10 +42,10 @@ A nominal variable is a categorical variable without an implied order. This mean
 For example,
 
 ```
-animals <- c("Elephant", "Giraffe", "Donkey", "Horse")
+animals <- factor( c("Elephant", "Giraffe", "Donkey", "Horse") )
 ```
 
-Here, it is impossible to say that one value is greater than or less than another.
+Here, it is impossible to say that one value is inherently greater than or less than another.
 
 In contrast, ordinal variables do have a natural ordering.
 Consider for example the categorical variable temperature vector with the
@@ -106,15 +107,6 @@ my.list[["c"]]
 my.list[[3]]
 ```
 
-To select a single element from a list, we use `[[]]`.
-
-
-#### Exercise 4a {-}
-
-What happens if you try to use `[]` to select a single element from a list? Or `[[]]` to select a subset of a list?
-```{r}
-
-```
 
 
 
@@ -136,24 +128,26 @@ the different columns of the data frame. The argument vectors should all have th
 
 ```{r}
 # Definition of vectors
-name <- c("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune")
-type <- c("Terrestrial", "Terrestrial", "Terrestrial", "Terrestrial", "Gas giant", "Gas giant", "Ice giant", "Ice giant")
-mass <- c(0.0553, 0.815, 1, 0.107, 317.8, 95.2, 14.5, 17.1)
-diameter <- c(0.383, 0.949, 1, 0.532, 11.21, 9.45, 4.01, 3.88)
-day.length <- c(175.9, 116.8, 1, 1.03, 0.414, 0.444, 0.718, 0.671)
-distance.from.sun <- c(0.387, 0.723, 1, 1.52, 5.20, 9.58, 19.2, 30.05)
-orbital.period <- c(0.241, 0.615, 1, 1.88, 11.9, 29.4, 83.7, 163.7)
-rings <- c(FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE)
+vec.name <- c("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune")
+vec.type <- c("Terrestrial", "Terrestrial", "Terrestrial", "Terrestrial", "Gas giant", "Gas giant", "Ice giant", "Ice giant")
+vec.mass <- c(0.0553, 0.815, 1, 0.107, 317.8, 95.2, 14.5, 17.1)
+vec.diameter <- c(0.383, 0.949, 1, 0.532, 11.21, 9.45, 4.01, 3.88)
+vec.day.length <- c(175.9, 116.8, 1, 1.03, 0.414, 0.444, 0.718, 0.671)
+vec.distance.from.sun <- c(0.387, 0.723, 1, 1.52, 5.20, 9.58, 19.2, 30.05)
+vec.orbital.period <- c(0.241, 0.615, 1, 1.88, 11.9, 29.4, 83.7, 163.7)
+vec.rings <- c(FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE)
 
 # Create a data frame from the vectors
-planets <- data.frame(name, type, mass, diameter, day.length, distance.from.sun, orbital.period, rings)
+planets <- data.frame(name=vec.name, type=vec.type, mass=vec.mass, diameter=vec.diameter, day.length=vec.day.length, distance.from.sun=vec.distance.from.sun, orbital.period=vec.orbital.period, rings=vec.rings, stringsAsFactors=FALSE)
+
+# Convert type to a factor
+planets$type <- factor( planets$type )
 
 planets
 ```
 
 
-Note that the default behaviour is to automatically convert character data to factors.
-This can be prevented by setting the argument `stringsAsFactors = FALSE`.
+Note that we can control whether character data is automatically converted to factors by setting the argument `stringsAsFactors` to `TRUE` or `FALSE`.
 
 When working with large data sets, a data analyst's first task is to develop a clear understanding of its structure and main elements.
 Therefore, it is often useful to show only a small part of the entire data set.
@@ -226,7 +220,7 @@ planets
 ```
 
 
-#### Exercise 4b {-}
+#### Exercise 4a {-}
 
 Add a new column to `planets` to show the density of each planet relative to Earth (correct to 3 d.p.).
 
@@ -279,7 +273,7 @@ Here are a few useful functions for understanding the structure of your data:
 
 
 
-#### Exercise 4c {-}
+#### Exercise 4b {-}
 
 Load the `mlb_players.csv` data into your workspace. This contains biometric data for Major League Baseball players.
 
@@ -295,7 +289,7 @@ Try the following to get a feel for the data:
 ```
 
 
-#### Exercise 4d {-}
+#### Exercise 4c {-}
 
 1. Write a function `bmi` that takes a person's weight in lbs and height in inches and returns their [Body Mass Index](https://www.nhs.uk/common-health-questions/lifestyle/what-is-the-body-mass-index-bmi/).
 ```{r}
