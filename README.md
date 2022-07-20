@@ -1,4 +1,4 @@
-# R Programming
+# Introduction to R
 
 This course provides an introduction to R as a programming language, including:
 
