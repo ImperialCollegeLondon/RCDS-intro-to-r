@@ -28,7 +28,7 @@ Download this repository to your computer as a ZIP file (via the big green butto
 
 Open `r_programming_1.html` in your web browser to get started.
 
-Alternatively, you can run the notebook online using Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/johnpinney/r_programming/master?urlpath=rstudio)
+Alternatively, you can run the notebook online using Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ImperialCollegeLondon/RCDS-intro-to-r/master?urlpath=rstudio)
 
 
 
@@ -37,7 +37,7 @@ Alternatively, you can run the notebook online using Binder: [![Binder](https://
 Your feedback is very important to the Graduate School as we are continually trying to improve the training we offer.
 
 At the end of the course, please help us by completing the evaluation form at
-http://bit.ly/rcds2021
+https://bit.ly/3VvUSVp
 
 
 <hr>
